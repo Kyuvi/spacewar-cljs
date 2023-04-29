@@ -3,16 +3,13 @@
    :license {:name "GPL-3.0 WITH Classpath-exception-2.0"
              :url "https://www.gnu.org/licenses/gpl-3.0.html"}}
   (:require
-   ;; [sutils.hershey :as hsu]
    [sutils.canvas :as cvu]
    [sutils.geom :as gmu]
-   ;; [spacewar.kone :as kn]
-   ;; [spacewar.obj :as obj]
    ))
 
         ;;;; game constant values ;;;;
 
-(def version "v0.01")
+(def version "v1.0")
 
 
 (def game-view {:fps 60 :width 604 :height 604 :radius 302})
