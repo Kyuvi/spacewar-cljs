@@ -53,8 +53,8 @@
                            :ship2 (get-in previous-state
                                           [:scene :ship2 :active])}})
       :key-input {:pressed
-                    (transient #{})
-                    ;; #{}
+                    ;; (transient #{})
+                    #{}
 
                   :single #{}}} )))
 
@@ -135,12 +135,12 @@
   )
 
 (defn remove-pressed-key [db key]
-  ;; (update-in db [:key-input :pressed] #(disj % key)))  ;; sets
-  (update-in db [:key-input :pressed] #(disj! % key))) ;; for transient sets
+  (update-in db [:key-input :pressed] #(disj % key)))  ;; sets
+  ;; (update-in db [:key-input :pressed] #(disj! % key))) ;; for transient sets
 
 (defn add-pressed-key [db key]
-  ;; (update-in db [:key-input :pressed] #(conj % key)) ;; sets
-  (update-in db [:key-input :pressed] #(conj! % key))  ;; for transients sets
+  (update-in db [:key-input :pressed] #(conj % key)) ;; sets
+  ;; (update-in db [:key-input :pressed] #(conj! % key))  ;; for transients sets
   )
 
 (defn switch-pause-flag [db]
@@ -252,13 +252,11 @@
 
     (cond action (action cofx)
           (ckey-set key) (add-pressed-key-cofx cofx key)
-          :else (no-op cofx))
- ) )
+          :else (no-op cofx))))
 
 (defn handle-key-up
   [{db :db :as cofx} kw {:keys [event key shift alt] :as data}]
-  (remove-pressed-key-cofx cofx key)
-  )
+  (remove-pressed-key-cofx cofx key))
 
 
         ;;;; game scene updates ;;;;
@@ -295,8 +293,7 @@
         [p2-top p2-bot]  [(apply min p2y-list) (apply max p2y-list)]
         ]
     (and (< p2-left p1-right) (< p1-left p2-right)
-         (< p2-top p1-bot) (< p1-top p2-bot))
-    ))
+         (< p2-top p1-bot) (< p1-top p2-bot))))
 
 (defn check-array-collision
   "Check if the objects contained in vec1 'collide' with the objects contained in vec2.
@@ -520,27 +517,11 @@
                 (let [{:keys [state previous]} (initialize-state :end (:state ndb))]
                   (assoc db :state state :previous previous))
                 :else
-                ndb)
-         ;;  ;; (println "update")
-         ;;  ;; (println (map (juxt obj/get-pos :active) [nshp1 nshp2]))
-         ;; (assoc-in db [:state :scene] (merge scene {:ship1 tshp1 :ship2 tshp2} ))
-         ;; (assoc-in db [:state :scene] (merge scene {:ship1 nshp1 :ship2 nshp2} ))
-          ;; collision-array-1
-          ;; collided-array-2
-         ;; nshp2
-
-          ;; [0]
-
-          )
-
-        )
-  )
+                ndb))))
 
 (defn update-scene-cofx
   [{db :db}]
   {:db (update-scene db)})
 
 (defn game-tick [{db :db :as cofx}]
-  ;; (println "tick")
-  (update-scene-cofx cofx)
-  )
+  (update-scene-cofx cofx))
