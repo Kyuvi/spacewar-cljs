@@ -3,11 +3,8 @@
    :license {:name "GPL-3.0 WITH Classpath-exception-2.0"
              :url "https://www.gnu.org/licenses/gpl-3.0.html"}}
   (:require
-   ;; [sutils.hershey :as hsu]
    [sutils.canvas :as cvu]
    [sutils.geom :as gmu]
-   ;; [spacewar.kone :as kn]
-   ;; [spacewar.obj :as obj]
    ))
 
         ;;;; game constant values ;;;;
@@ -24,8 +21,7 @@
 
 (def game-modes "Set of game modes"
   #{:menu :single :versus :end :options :controls :credits})
-;; :pause
-;
+                                        ;
 (def score-view {:width 100 :height 40})
 
 (def vector-color "#0F0")
@@ -46,28 +42,21 @@
 
 (def p2spawn [450 450])
 
-(def ship1 [
-  [[8, 0], [1, 2], [-1, 2], [-8, 1], [-8, -1], [-1, -2], [1, -2], [8, 0]],
-  [[-1,  2], [-6,  4], [-8,  4], [-5,  1.5]],
-  [[-1, -2], [-6, -4], [-8, -4], [-5, -1.5]]
-])
+(def ship1 [[[8, 0], [1, 2], [-1, 2], [-8, 1], [-8, -1], [-1, -2], [1, -2], [8, 0]],
+            [[-1,  2], [-6,  4], [-8,  4], [-5,  1.5]],
+            [[-1, -2], [-6, -4], [-8, -4], [-5, -1.5]]])
 
-(def ship2 [
-  [[8, 0], [1, 2], [-8, 2], [-8, -2], [1, -2], [8, 0]],
-  [[-1,  2], [-6,  4], [-8,  4], [-8,  2]],
-  [[-1, -2], [-6, -4], [-8, -4], [-8, -2]],
-  [[8, 0], [-8, 0]]
-            ])
+(def ship2 [[[8, 0], [1, 2], [-8, 2], [-8, -2], [1, -2], [8, 0]],
+            [[-1,  2], [-6,  4], [-8,  4], [-8,  2]],
+            [[-1, -2], [-6, -4], [-8, -4], [-8, -2]],
+            [[8, 0], [-8, 0]]])
 
-;; (def cursor-xpos {})
-;; (def cursor-ypos {})
 
 (def cursor-pos {:menu [[190, 250], [190, 300], [200, 350] [200, 400]]
                  :options []
                  :controls [[80 210] [365 210] [80 260] [345 260] [80 365]
-                            [365 365] [80 415] [345 415] [225 460]
-                            ]
-                 :end [[180, 360], [230, 410]] })
+                            [365 365] [80 415] [345 415] [225 460]]
+                 :end [[180, 360], [230, 410]]})
 
 (def ^:const star-count 40)
 
@@ -76,15 +65,11 @@
   ([qty]
    (let [xc (/ (:width game-view) 2)
          yc (/ (:height game-view) 2)
-         ;; dist (fn [] (* (:radius game-view) (Math/random)))
-         ;; theta (fn [] (* 2 Math/PI (Math/random)))
          rand-star-pos (fn []
                          (let [dist (rand (:radius game-view))
                                theta (rand (* 2 Math/PI))]
-                         [(+ (* dist (Math/cos theta)) xc)
-                          (+ (* dist (Math/sin theta)) yc)]))
-                         ;; [(+ (* (dist) (Math/cos (theta))) xc)
-                          ;; (+ (* (dist) (Math/sin (theta))) yc)])
+                           [(+ (* dist (Math/cos theta)) xc)
+                            (+ (* dist (Math/sin theta)) yc)]))
          star-list (repeatedly qty rand-star-pos)]
      star-list)))
 
@@ -109,43 +94,20 @@
   ([ctx star-list] (draw-stars ctx star-list vector-color))
   ([ctx star-list color]
    (let [old-line-width (.-lineWidth ctx)]
-    (doseq [[x-pos y-pos] star-list]
-      ;; (cvu/draw-point ctx (first pos) (second pos) :width 1 :color color))))
-      (cvu/draw-point ctx x-pos y-pos :width 1 :color color))
-    ;; reset line width which draw-point increases by 1
-    (set! (.-lineWidth ctx) old-line-width))))
+     (doseq [[x-pos y-pos] star-list]
+       ;; (cvu/draw-point ctx (first pos) (second pos) :width 1 :color color))))
+       (cvu/draw-point ctx x-pos y-pos :width 1 :color color))
+     ;; reset line width which draw-point increases by 1
+     (set! (.-lineWidth ctx) old-line-width))))
 
-;; (defn draw-stars
-;;   ;; "Returns a lazy-seq of star position vectors for the game."
-;;   "Draw background stars in the spacewar game scene."
-;;   ([ctx]
-;;    (draw-stars ctx kn/game-view star-count vector-color))
-;;   ([ctx screen-map qty color]
-;;   (let [xc (/ (:width screen-map) 2)
-;;         yc (/ (:height screen-map) 2)
-;;         dist (fn [] (* (:radius screen-map) Math.random))
-;;         theta (fn [] (* 2 Math/PI (Math/random)))
-;;         rand-star-pos (fn []
-;;                         [(+ (* (dist) (Math.cos (theta))) xc)
-;;                          (+ (* (dist) (Math.cos (theta))) yc)])
-;;         star-list (repeatedly qty rand-star-pos)]
-;;     (doseq [pos star-list]
-;;       (cvu/draw-point ctx (first pos) (second pos) :width 1 :color color))
-;;         )))
 
 (defn draw-border
   ([ctx] (draw-border ctx game-view vector-color))
   ([ctx screen-map color]
    (let [{:keys [width height radius]} screen-map
          [xc yc] [(/ width 2) (/ height 2)]]
-    (cvu/draw-circle ctx xc yc radius :width 1 :color color))
-  ))
-
-;; (defn draw-scene-background [ctx]
-;;   (.clearRect ctx 0 0 (:width game-view) (:height game-view))
-;;   (draw-border ctx)
-;;   (draw-stars ctx)
-;;   )
+     (cvu/draw-circle ctx xc yc radius :width 1 :color color))
+   ))
 
 
         ;;;; game sounds ;;;;
@@ -193,23 +155,10 @@
 (defn check-num [n] ;; TODO: change to valid-num?
   (and (number? n) (not (.isNaN js/Number n)) (js/isFinite n) ))
 
-;; (defn fill-explosion [radius debris]
-;;     (loop [arr [] debris-count debris]
-;;       (if (>= (count arr) debris-count)
-;;         arr
-;;         (let [theta (rand gmu/tau)
-;;               r (rand radius)
-;;               [x y] [(* r (Math/cos theta)) (* r (Math/sin theta))]]
-;;           (recur (conj arr [[x y] [(inc x) (inc y)]]) debris-count) ))))
 
 (defn fill-explosion
   "Fill an area defined by `radius` with `qty` 'particles' of debris."
   [radius qty]
-  ;; (let [debris-fn (fn []
-  ;;                   (let [theta (rand gmu/tau)
-  ;;                         r (rand radius) ]
-  ;;                     [(* r (Math/cos theta)) (* r (Math/sin theta))]))]
-  ;;   (repeatedly debris debris-fn))
   (repeatedly qty
               (fn []
                 (let [theta (rand gmu/tau)
@@ -226,4 +175,4 @@
     (if (> cur-speed max-speed)
       [(* xspeed (/ max-speed cur-speed)) (* yspeed (/ max-speed cur-speed))]
       [xspeed yspeed])
-  ))
+    ))
