@@ -2,10 +2,8 @@
   {:author "Kyuvi"
    :license {:name "GPL-3.0 WITH Classpath-exception-2.0"
              :url "https://www.gnu.org/licenses/gpl-3.0.html"}}
-  (:require
-   [sutils.canvas :as cvu]
-   [sutils.geom :as gmu]
-   ))
+  (:require [sutils.canvas :as cvu]
+            [sutils.geom :as gmu]))
 
         ;;;; game constant values ;;;;
 
@@ -37,24 +35,21 @@
 
 (def p2spawn [450 450])
 
-(def ship1 [
-  [[8, 0], [1, 2], [-1, 2], [-8, 1], [-8, -1], [-1, -2], [1, -2], [8, 0]],
-  [[-1,  2], [-6,  4], [-8,  4], [-5,  1.5]],
-  [[-1, -2], [-6, -4], [-8, -4], [-5, -1.5]]])
+(def ship1 [[[8 0] [1 2] [-1 2] [-8 1] [-8 -1] [-1 -2] [1 -2] [8 0]]
+            [[-1  2] [-6  4] [-8  4] [-5  1.5]]
+            [[-1 -2] [-6 -4] [-8 -4] [-5 -1.5]]])
 
-(def ship2 [
-  [[8, 0], [1, 2], [-8, 2], [-8, -2], [1, -2], [8, 0]],
-  [[-1,  2], [-6,  4], [-8,  4], [-8,  2]],
-  [[-1, -2], [-6, -4], [-8, -4], [-8, -2]],
-  [[8, 0], [-8, 0]]])
+(def ship2 [[[8 0] [1 2] [-8 2] [-8 -2] [1 -2] [8 0]]
+            [[-1  2] [-6  4] [-8  4] [-8  2]]
+            [[-1 -2] [-6 -4] [-8 -4] [-8 -2]]
+            [[8 0] [-8 0]]])
 
 
-(def cursor-pos {:menu [[190, 250], [190, 300], [200, 350] [200, 400]]
+(def cursor-pos {:menu [[190 250] [190 300] [200 350] [200 400]]
                  :options []
                  :controls [[80 210] [365 210] [80 260] [345 260] [80 365]
-                            [365 365] [80 415] [345 415] [225 460]
-                            ]
-                 :end [[180, 360], [230, 410]] })
+                            [365 365] [80 415] [345 415] [225 460]]
+                 :end [[180 360] [230 410]] })
 
 (def ^:const star-count 40)
 
@@ -103,9 +98,7 @@
   ([ctx screen-map color]
    (let [{:keys [width height radius]} screen-map
          [xc yc] [(/ width 2) (/ height 2)]]
-    (cvu/draw-circle ctx xc yc radius :width 1 :color color))
-  ))
-
+    (cvu/draw-circle ctx xc yc radius :width 1 :color color))))
 
 
         ;;;; game sounds ;;;;
@@ -136,7 +129,7 @@
 
         ;;;; miscellenious functions ;;;;
 
-(defn check-num [n] ;; TODO: change to valid-num?
+(defn valid-num? [n] ;; TODO: change to valid-num?
   (and (number? n) (not (.isNaN js/Number n)) (js/isFinite n) ))
 
 
@@ -147,7 +140,8 @@
               (fn []
                 (let [theta (rand gmu/tau)
                       r (rand radius)
-                      [x y] [(* r (Math/cos theta)) (* r (Math/sin theta))]]
+                      [x y] [(* r (Math/cos theta))
+                             (* r (Math/sin theta))]]
                   [[x y] [(inc x) (inc y)]]))))
 
 (defn regulate-speed
@@ -157,6 +151,6 @@
   (let [max-speed (:speed body-vals)
         cur-speed (Math/hypot xspeed yspeed)]
     (if (> cur-speed max-speed)
-      [(* xspeed (/ max-speed cur-speed)) (* yspeed (/ max-speed cur-speed))]
-      [xspeed yspeed])
-  ))
+      [(* xspeed (/ max-speed cur-speed))
+       (* yspeed (/ max-speed cur-speed))]
+      [xspeed yspeed])))

@@ -50,9 +50,9 @@
   (reset-sprite
     [sp x y rotation xspeed yspeed]
     (let [[oxspeed oyspeed orot] ((juxt :xspeed :yspeed :rotation) sp)
-          nxspeed (if (pr/check-num xspeed) xspeed oxspeed)
-          nyspeed (if (pr/check-num yspeed) yspeed oyspeed)
-          nrotation (if (pr/check-num rotation) rotation orot) ;; REVIEW: update-rotation
+          nxspeed (if (pr/valid-num? xspeed) xspeed oxspeed)
+          nyspeed (if (pr/valid-num? yspeed) yspeed oyspeed)
+          nrotation (if (pr/valid-num? rotation) rotation orot) ;; REVIEW: update-rotation
           ]
       (assoc sp :x x :y y :xspeed nxspeed :yspeed nyspeed :rotation nrotation)
       )
@@ -289,7 +289,7 @@
       [true t-xspeed t-yspeed]
       ))
   (update-rotation [shp angle]
-    (when (pr/check-num angle)
+    (when (pr/valid-num? angle)
       (let [shape (:shape shp)
             center (get-in shp [:core :center])
             ncore (assoc (:core shp) :rotation angle)
