@@ -1,13 +1,10 @@
 (ns spacewar.kone
   "Main engine of spacewar! game."
-  (:require
-   [sutils.geom :as gm]
-   [sutils.rf :as rfu]
-   [spacewar.prep :as pr]
-   [spacewar.obj :as obj]
-
-   [spacewar.rfm.subs :as subs]
-   ))
+  (:require [sutils.geom :as gm]
+            [sutils.rf :as rfu]
+            [spacewar.prep :as pr]
+            [spacewar.obj :as obj]
+            [spacewar.rfm.subs :as subs]))
 
 
         ;;;; game state  ;;;;
@@ -20,9 +17,8 @@
    (let [settings (if previous-state
                     (:settings previous-state)
                     {:rounds 5
-                     :gravity-well :blackhole
-                     :controls {
-                                :p1 {:thrust "a" :fire "d" :left "s" :right "t"}
+                     :gravity-well :wormhole
+                     :controls {:p1 {:thrust "a" :fire "d" :left "s" :right "t"}
                                 :p2 {:thrust "o" :fire "i" :left "n" :right "e"}}})]
      {:state
       {:mode mode
@@ -37,8 +33,7 @@
                       [p2x p2y] pr/p2spawn
                       controls (:controls settings)
                       [controls-one controls-two] ((juxt :p1 :p2) controls)]
-                  {
-                   :ship1 (obj/make-ship p1x p1y controls-one pr/ship1 1.5
+                  {:ship1 (obj/make-ship p1x p1y controls-one pr/ship1 1.5
                              (/ Math/PI 4) pr/play-laser-1 true)
                    :ship2 (obj/make-ship p2x p2y controls-two pr/ship2 1.5
                              (/ (* -3 Math/PI) 4) pr/play-laser-2 true)

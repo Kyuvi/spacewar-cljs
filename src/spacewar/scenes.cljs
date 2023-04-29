@@ -2,7 +2,7 @@
   {:author "Kyuvi"
    :license {:name "GPL-3.0 WITH Classpath-exception-2.0"
              :url "https://www.gnu.org/licenses/gpl-3.0.html"}}
-(:require [reagent.core :as rg :refer [atom]]
+  (:require [reagent.core :as rg :refer [atom]]
             [reagent.dom :as rd]
             [re-frame.core :as rf]
             [sutils.canvas :as cvu]
@@ -11,9 +11,7 @@
             [spacewar.prep :as pr]
             [spacewar.obj :as obj]
             [spacewar.kone :as kn]
-            [spacewar.rfm.subs :as subs]
-            )
-  )
+            [spacewar.rfm.subs :as subs]))
 
 (defn draw-game-scene [ctx state]
   (let [scene (:scene state)
@@ -21,8 +19,7 @@
         ]
     (run! #(obj/draw-sprite % ctx) [ship1 ship2 gravity-well])
     (when paused
-      (hsu/write-centered ctx (/ (:height pr/game-view) 2) "PAUSED" 4 ))
-))
+      (hsu/write-centered ctx (/ (:height pr/game-view) 2) "PAUSED" 4 ))))
 
 (defn characterize-string
   "Returns a character that represents the arrow keys otherwise the string `s`."
@@ -48,16 +45,14 @@
         b2 "enter - select            esc - menu"
         b3 "space - select/pause"
         b4 pr/version
-        cursor (:cursor state)
-        ]
+        cursor (:cursor state)]
     (run!
       (fn [[txt ypos size]]
         (hsu/write-centered ctx ypos txt size ))
       [[t1 88 5] [t2 158 2.7]
        [o1 240 2] [o2 290 2] [o3 340 2] [o4 390 2]
        [b1 470 1.2] [b2 500 1.2] [b3 530 1.2] [b4 570 1]])
-    (obj/draw-sprite cursor ctx)
-    ))
+    (obj/draw-sprite cursor ctx)))
 
 (defn draw-credits-scene [ctx]
   (let [t1 "SPACEWAR!"
@@ -80,8 +75,7 @@
         c3 ""
 
         b1 "esc - menu"
-        b4 pr/version
-        ]
+        b4 pr/version]
     (run!
      (fn [[txt ypos size]]
        (hsu/write-centered ctx ypos txt size ))
@@ -89,11 +83,9 @@
       [o1 170 1] [o2 190 1] [o3 210 1] [o4 230 0.8] [o5 270 1] [o6 290 1]
       [o7 310 1] [o8 330 1] [o9 350 1][o10 380 1] [o11 400 0.8]
       [c1 480 0.9][c2 500 0.9][c3 520 0.9]
-      [b1 555 1] [b4 575 1]]
-     )
-    ))
+      [b1 555 1] [b4 575 1]])))
 
-(defn draw-options-scene [ctx state])
+;; (defn draw-options-scene [ctx state])
 
 (defn draw-controls-scene [ctx state]
   (let [{:keys [p1 p2]} (get-in state [:settings :controls])
@@ -127,8 +119,7 @@
            [o1 200 2][o2 250 2]
            [t3 300 2.5]
            [o3 355 2][o4 405 2] [o5 450 2.5]
-           [b1 500 1] [b2 520 1] [b4 575 1]]
-          )
+           [b1 500 1] [b2 520 1] [b4 575 1]])
     (obj/draw-sprite cursor ctx)))
 
 (defn draw-end-scene [ctx state]

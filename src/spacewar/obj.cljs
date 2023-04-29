@@ -5,13 +5,11 @@
   (:require [sutils.canvas :as cvu]
             [spacewar.prep :as pr]
             [spacewar.rfm.subs :as subs]
-
             [sutils.rf :as rfu]
-            [sutils.geom :as gm]
-            ))
+            [sutils.geom :as gm]))
 
 (defprotocol SpriteProtocol
-  (get-pos [sprite] "Get position of `sprite` as [x y].") ;; TODO: remove spos use pos
+  (get-pos [sprite] "Get position of `sprite` as [x y].")
   (get-core-vals [sprite])
   (reset-sprite [sprite x y]
     [sprite x y rotation xspeed yspeed])
@@ -189,7 +187,7 @@
             fire-length (* size (:length pr/thruster-vals) (Math/random))
             fire-array [[xb yb] [(- xb (* fire-length (Math/cos rotation)))
                                  (- yb (* fire-length (Math/sin rotation)))]]]
-        (cvu/draw-seq ctx fire-array ))) ;;:width 1
+        (cvu/draw-seq ctx fire-array )))
     ;; draw shots
     (run! #(draw-sprite % ctx) shots)
     ))

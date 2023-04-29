@@ -23,15 +23,10 @@
 
 (defn foot-notes []
   [:div.footer
-   [:h4 "Copyright© 2023 " [:a {:href "https://codeberg.org/Kyuvi" } "Kyuvi"]
-    ]
-   [:p
-    "This software is under the "
+   [:h4 "Copyright© 2023 " [:a {:href "https://codeberg.org/Kyuvi" } "Kyuvi"]]
+   [:p "This software is under the "
     [:a {:href "https://www.gnu.org/licenses/gpl-3.0.en.html"} "GNU GPL3"]
-    " license"
-    ]
-   ]
-  )
+    " license"]])
 
 (defn game-canv []
   [:div#game-frame
@@ -42,8 +37,7 @@
   [:div.container
    [:title "SPACEWAR! [Cljs]"]
    [game-canv]
-  [foot-notes]
-  ])
+   [foot-notes]])
 
 (defn ^:dev/after-load render-page []
   (rf/clear-subscription-cache!)
@@ -63,8 +57,7 @@
        ;; TODO: depend on mode?
         key-list (apply into (map (juxt :thrust :fire :left :right) [p1 p2]))
         menu-keys #{"Enter" "ArrowUp" "ArrowDown" " " "Escape"}
-        key-set (into menu-keys key-list)
-        ]
+        key-set (into menu-keys key-list)]
   (when (key-set e.key) (.preventDefault e))
   (rf/dispatch [kw {:code e.keyCode :key e.key :shift e.shiftKey :alt e.altKey}])) )
 
@@ -75,7 +68,6 @@
   (rf/dispatch-sync [::events/initialize])
   (render-page)
   (br/add-listener js/document "keydown" #(dispatch-key-handler % ::events/key-down))
-  (br/add-listener js/document "keyup" #(dispatch-key-handler % ::events/key-up))
-  )
+  (br/add-listener js/document "keyup" #(dispatch-key-handler % ::events/key-up)))
 
 (run-spacewar)

@@ -2,7 +2,6 @@
   {:author "Kyuvi"
    :license {:name "GPL-3.0 WITH Classpath-exception-2.0"
              :url "https://www.gnu.org/licenses/gpl-3.0.html"}}
-
   (:require [reagent.core :as rg]
             [reagent.dom :as rd]
             [sutils.canvas :as cvu]
@@ -11,9 +10,7 @@
             [spacewar.obj :as obj]
             [spacewar.scenes :as sn]
             [spacewar.prep :as pr]
-            [spacewar.rfm.subs :as subs]
-            )
-  )
+            [spacewar.rfm.subs :as subs]))
 
 (def canvas-style {:max-width "80%" :max-height "80%" :margin-top "2%"
                    ;; :position "relative"
