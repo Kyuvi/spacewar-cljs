@@ -9,7 +9,7 @@
 (declare hershey-characters)
 
 (defn parse-letter [chc]
-  (let [cdesc (get hershey-characters (str/capitalize chc)) ;; change if expanding
+  (let [cdesc (get hershey-characters (str/capitalize chc))
         cpairs (re-find #"[^\d]+" cdesc)
         numerify-fn (fn [ch] (- (.charCodeAt ch) 82))
         limit-list (map numerify-fn (take 2 cpairs))
@@ -130,13 +130,4 @@
   ">" "3NUOVTRON"
   "↑" "9NVRLRW RORRL RURRL"
   "↓" "9NVRLRW RORRW RURRW"
-  ;; "⁎ " "9MWRJRP ROKUO RUKOO" ;; lower aseterix
-  ;; "^" "9JZRMRX RMRWR RMXWX"  ;; plus minus
-  ;; "^" "9JZRMRX RMMWM RMRWR"  ;; minus plus
-  ;; "*" "9JZRFRR RMIWO RWIMO"  ;;  upper asterix
-  ;; "^" "9F^RJR[ RJRZR RJ[Z]"  ;; plus slant
-  ;; "^" "9F^RJR[ RJJZJ RJRZR"  ;; minus plus
-  ;; "^" "3NVRFR[" ;; long line
-  ;; "^" "3I[LRXR" ;; long line
    })
-;; 635 637

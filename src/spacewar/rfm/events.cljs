@@ -7,16 +7,12 @@
             [reagent.dom :as rd]
             [re-frame.core :as rf]
             [sutils.rf :as rfu]
-            ;; [pong.prep :as pr]
-            ;; [pong.blkchars :as lt]
-            ;; [pong.obj :as obj]
             [spacewar.kone :as kn]
   ))
 
 (rf/reg-event-db
  ::initialize
  (fn [db event] (kn/initialize-state :menu))
- ;; (fn [db event] (kn/initialize-state :controls))
  )
 
 
@@ -28,14 +24,9 @@
 (rf/reg-event-fx
  ::key-down
  (fn [cofx [kw data]]
-    ;; (println kw data)
-    ;; (println "key event dispatch")
     (kn/handle-key-down cofx kw data)))
 
 (rf/reg-event-fx
  ::tick
- ;; (fn [cofx [_ dt]]
  (fn [cofx event]
-       (kn/game-tick cofx)
-    )
- )
+       (kn/game-tick cofx)))

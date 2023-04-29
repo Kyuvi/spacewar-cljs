@@ -23,17 +23,7 @@
                      :gravity-well :blackhole
                      :controls {
                                 :p1 {:thrust "a" :fire "d" :left "s" :right "t"}
-                                ;; :p1 {:thrust "a" :fire "s" :left "d" :right "t"}
-                                :p2 {:thrust "o" :fire "i" :left "n" :right "e"}}})
-         ;; controls (:controls settings)
-         ;; controls-one (:p1 controls)
-         ;; controls-two (:p2 controls)
-         ;; [p1t p1f p1l p1r] ((juxt :thrust :fire :left :right) (:p1 controls))
-         ;; [p2t p2f p2l p2r] ((juxt :thrust :fire :left :right) (:p2 controls))
-
-
-         ;; cursor-ship ([pr/ship1 pr/ship2] (rand-int 2)) ;;; move to cursor
-         ]
+                                :p2 {:thrust "o" :fire "i" :left "n" :right "e"}}})]
      {:state
       {:mode mode
        :settings settings
@@ -52,14 +42,6 @@
                              (/ Math/PI 4) pr/play-laser-1 true)
                    :ship2 (obj/make-ship p2x p2y controls-two pr/ship2 1.5
                              (/ (* -3 Math/PI) 4) pr/play-laser-2 true)
-                   ;; :ship1  (obj/update-rotation
-                   ;;          (obj/make-ship p1x p1y controls-one pr/ship1 1.5
-                   ;;                         pr/laser-1-sound true)
-                   ;;          (/ Math/PI 4))
-                   ;; :ship2 (obj/update-rotation
-                   ;;         (obj/make-ship p2x p2y controls-two pr/ship2 1.5
-                   ;;                       pr/laser-2-sound true)
-                   ;;         (/ (* -3 Math/PI) 4))
                    :gravity-well (obj/make-gravity-well)
                    :score {}
                    :paused false}))}
@@ -72,29 +54,9 @@
                                           [:scene :ship2 :active])}})
       :key-input {:pressed
                     (transient #{})
-                    ;; (new js/Set )
                     ;; #{}
 
-                  :single #{}}
-      } )))
-
-
-        ;;;; game functions ;;;;
-;; Moved to SpriteProtocol
-;; (defn add-gravity [element cx cy gravity] ;; TODO: move to obj/SpiteProtocol, SPCore?
-;;   (let [[x y] (obj/get-pos element)
-;;         [dx dy] [(- x cx ) (- y cy)]
-;;         F (/ gravity (Math/pow (Math/hypot dx dy) 2))
-;;         F-neg (- F)
-;;         angle (Math/atan2 dy dx)
-;;         ;; [fx fy] [(- (* F (Math/cos angle) )) (- (* F (Math/sin angle)))]
-;;         [fx fy] [(* F-neg (Math/cos angle) ) (* F-neg (Math/sin angle))]
-;;         [xspeed yspeed] ((juxt :xspeed :yspeed ) element)
-;;         accel (:accel pr/body-vals)]
-;;     (assoc element :xspeed (+ xspeed (if (< fx accel) fx accel ))
-;;            :yspeed (+ yspeed (if (< fy accel) fy accel )))))
-
-
+                  :single #{}}} )))
 
 
         ;;;; game functions ;;;;
@@ -102,8 +64,6 @@
   ([db mode-opts]
    (switch-mode db mode-opts false))
    ([db mode-opts silent-pred]
-  ;; (println "here")
-  ;; (pr/play-laser-2)
   (when-not silent-pred
     (if (= mode-opts :menu) (pr/play-laser-2) (pr/play-laser-1)))
   (let [cur-state (:state db)
@@ -112,13 +72,10 @@
         new-mode (if (= :previous temp-mode)
                    (rfu/<sub [::subs/previous-mode]) temp-mode)
         {:keys [state previous]} (initialize-state new-mode cur-state)]
-  ;; (println current-pos new-mode)
   (assoc db :state state :previous previous)
   )))
 
 (defn move-cursor [db dir]
-  ;; (println "cursor" db dir)
-  ;; (pr/play-thrusters)
   (update-in db [:state :cursor] #(obj/update-sprite % dir)))
 
 (defn handle-options-enter [db])
@@ -180,13 +137,10 @@
 (defn remove-pressed-key [db key]
   ;; (update-in db [:key-input :pressed] #(disj % key)))  ;; sets
   (update-in db [:key-input :pressed] #(disj! % key))) ;; for transient sets
-  ;; (update-in db [:key-input :pressed] #(do (.delete % key) %))) ;; js/Sets
 
 (defn add-pressed-key [db key]
   ;; (update-in db [:key-input :pressed] #(conj % key)) ;; sets
   (update-in db [:key-input :pressed] #(conj! % key))  ;; for transients sets
-  ;; (update-in db [:key-input :pressed] #(.add % key)) ;; js/Sets
-  ;; )
   )
 
 (defn switch-pause-flag [db]
@@ -242,9 +196,6 @@
          )))
 
 (def credit-down-actions
-  ;; {"Escape" #((let [cofx %] ;; doesn't work, why?
-  ;;               (do (pr/play-laser-1)
-  ;;                   (switch-mode-cofx cofx :menu))))}
   {"Escape" #(switch-mode-cofx % :menu) }
   )
 
@@ -288,11 +239,7 @@
 
 (defn handle-key-down
   [{db :db :as cofx} kw {:keys [code key shift alt] :as data}]
-  (let [;{p1t :thrust p1f :fire p1l :left p1r :right} (rfu/<sub
-        ;                                              [::subs/p-one-keys])
-        ;{p2t :thrust p2f :fire p2l :left p2r :right} (rfu/<sub
-         ;                                             [::subs/p-two-keys])
-        p-one-keys ((juxt :thrust :fire :left :right)
+  (let [p-one-keys ((juxt :thrust :fire :left :right)
                     (rfu/<sub [::subs/p-one-keys]))
         p-two-keys ((juxt :thrust :fire :left :right)
                     (rfu/<sub [::subs/p-two-keys]))
@@ -301,11 +248,8 @@
         ckey-set (set (if (= mode :versus)
                         (into p-one-keys p-two-keys)
                         p-one-keys))
-        action (get-in down-actions-by-mode [(:mode (:state db)) key])
-]
+        action (get-in down-actions-by-mode [(:mode (:state db)) key])]
 
-    ;; (println action)
-    ;; (println (rfu/<sub [::subs/pressed]))
     (cond action (action cofx)
           (ckey-set key) (add-pressed-key-cofx cofx key)
           :else (no-op cofx))
@@ -322,7 +266,6 @@
 (defn rotate-vector [vect angle]
   (let [[vx vy] vect]
     [(- (* vx (Math/cos angle)) (* vy (Math/sin angle)))   ;; x
-     ;; (- (* vy (Math/cos angle)) (* vx (Math/sin angle)))])) ;; y
      (+ (* vy (Math/cos angle)) (* vx (Math/sin angle)))])) ;; y
 
 
@@ -346,9 +289,6 @@
         p1y-list (map second p1cTR)
         p2x-list (map first p2cTR)
         p2y-list (map second p2cTR)
-        ;; [p1-left p1-top p2-left p2-top] (mapv
-        ;;                                  #(apply min %)
-        ;;                                  [p1x-list p1y-list p2x-list p2y-list])
         [p1-left p1-right] [(apply min p1x-list) (apply max p1x-list)]
         [p1-top p1-bot]  [(apply min p1y-list) (apply max p1y-list)]
         [p2-left p2-right] [(apply min p2x-list) (apply max p2x-list)]
@@ -410,8 +350,7 @@
   (let [ox (aget origin 0)
         oy (aget origin 1)
         x (aget point 0)
-        y (aget point 1)
-        ]
+        y (aget point 1)]
     #js[(- x ox) (- y oy)]))
 
 
@@ -419,8 +358,7 @@
   "Check if `sprite1` collides with `sprite2` using javascript functions
   (for speed uptimizations)."
   ^boolean [^record sprite1 ^record sprite2]
-  (let [;;[p1c p2c] (mapv obj/get-corners [sprite1 sprite2])
-        p1c (clj->js (obj/get-corners sprite1))
+  (let [p1c (clj->js (obj/get-corners sprite1))
         p2c (clj->js (obj/get-corners sprite2))
         ;; make (p1c 0) origin
         new-origin (aget p1c 0) ;; get relative origin
@@ -430,7 +368,6 @@
         p2cT (.map p2c #(js-translate-origin % new-origin))
 
         ;; angle to alighn p1 bounding box
-        ;; angle (Math/atan2 (aget (aget p1cT 2) 1) (aget (aget p1cT 2) 0))
         angle (Math/atan2 (aget p1cT 2 1) (aget p1cT 2 0))
 
         ;; rotate vectors to align
@@ -438,19 +375,6 @@
         p2cTR (.map p2cT #(js-rotate-vector % angle))
 
         ;; calculate extreme points of bounding boxes
-        ;; p1x-arr (.map p1cTR #(aget % 0))
-        ;; p1y-arr (.map p1cTR #(aget % 1))
-        ;; p2x-arr (.map p2cTR #(aget % 0))
-        ;; p2y-arr (.map p2cTR #(aget % 1))
-        ;; p2y-list (map second p2cTR)
-        ;; p1-left (apply Math/min p1x-arr)
-        ;; p1-right  (apply Math/max p1x-arr)
-        ;; p1-top (apply Math/min p1y-arr)
-        ;; p1-bot   (apply Math/max p1y-arr)
-        ;; p2-left (apply Math/min p2x-arr)
-        ;; p2-right  (apply Math/max p2x-arr)
-        ;; p2-top (apply Math/min p2y-arr)
-        ;; p2-bot   (apply Math/max p2y-arr)
         p1-left (apply Math/min (.map p1cTR #(aget % 0))) ;; these seem faster
         p1-right  (apply Math/max (.map p1cTR #(aget % 0)) )
         p1-top (apply Math/min (.map p1cTR #(aget % 1)))
@@ -461,12 +385,8 @@
         p2-bot   (apply Math/max (.map p2cTR #(aget % 1)))
         ]
 
-    ;; [p1cTR p2cTR]
-    ;; [p1x-arr]
-    ;; [ p2-left p1-right  p1-left p2-right p2-top p1-bot p1-top p2-bot]
     (and (< p2-left p1-right) (< p1-left p2-right)
-         (< p2-top p1-bot) (< p1-top p2-bot))
-    ))
+         (< p2-top p1-bot) (< p1-top p2-bot))))
 
 
 
@@ -496,7 +416,6 @@
             (recur (inc i)))))))
 
 
-;; this seems faster that using loop (well my implementation at least)
 (defn js-check-array-collision-dsq
   "Check if the objects contained in vec1 'collide' with the objects contained in vec2.
    Returns a javascript array of the javascript array versions of the vectors
@@ -513,9 +432,6 @@
           (.splice arr1 i 1 (obj/explode-sprite sp1))
           (.splice arr2 j 1 (obj/explode-sprite sp2)))))
         #js[arr1 arr2]))
-
-
-
 
 
 (defn ai-ship-update
@@ -555,8 +471,6 @@
             [nxsp nysp] (pr/regulate-speed txsp tysp) ;; REVIEW: necessary?
             ncore (assoc core :rotation nrotation :xspeed nxsp :yspeed nysp)
             ]
-        ;; [delta1 delta2 delta3 delta4 ]
-        ;; [rotation]
         (assoc t-ai-shp :core ncore :show-shape show-shape :thrusters nthrust
                :shots nshots :shot-timeout n-shot-time )
         )
@@ -565,42 +479,38 @@
 (defn update-scene [db]
   (cond (or (not (#{:single :versus} (get-in db [:state :mode])))
             (get-in db [:state :scene :paused]))
-        ;; (do (println "db")
           db
-          ;; )
-        ;; (not (.hasFocus js/document)) (assoc-in db [:state :scene :paused] true)
+        (not (.hasFocus js/document)) (assoc-in db [:state :scene :paused] true)
         :else
         (let [cur-state (:state db)
               scene (:scene cur-state)
-              {:keys [ship1 ship2 ]} scene
-              ;; [tshp1 tshp2] (mapv #(obj/add-gravity (obj/update-sprite %))
-              ;;                     [ship1 ship2])
+              {:keys [ship1 ship2]} scene
               tshp1 (obj/add-gravity (obj/update-sprite ship1))
               tshp2 (obj/add-gravity (if (= (:mode cur-state) :single)
-                                       (ai-ship-update ship2 tshp1) ;ship1)
+                                       (ai-ship-update ship2 tshp1)
                                        (obj/update-sprite ship2)))
               [shots1 shots2] (mapv :shots [tshp1 tshp2])
               collision-array-1 (conj shots1 tshp1)
               collision-array-2 (conj shots2 tshp2)
 
-              [collided-array-1 collided-array-2] (check-array-collision
-              ;; [collided-array-1 collided-array-2] (check-array-collision-dsq
-                                                   collision-array-1
-                                                   collision-array-2)
-              nshp1 (assoc (last collided-array-1)
-                           :shots (vec (butlast collided-array-1)))
-              nshp2 (assoc (last collided-array-2)
-                           :shots (vec (butlast collided-array-2)))
+              ;; [collided-array-1 collided-array-2] (check-array-collision
+              ;; ;; [collided-array-1 collided-array-2] (check-array-collision-dsq
+              ;;                                      collision-array-1
+              ;;                                      collision-array-2)
+              ;; nshp1 (assoc (last collided-array-1)
+              ;;              :shots (vec (butlast collided-array-1)))
+              ;; nshp2 (assoc (last collided-array-2)
+              ;;              :shots (vec (butlast collided-array-2)))
 
               ;; using js arrays
               ;; [collided-array-1 collided-array-2] (js-check-array-collision
-              ;; [collided-array-1 collided-array-2] (js-check-array-collision-dsq
-              ;;                                      collision-array-1
-              ;;                                      collision-array-2)
-              ;; nshp1 (assoc (.pop collided-array-1)
-              ;;              :shots (vec collided-array-1))
-              ;; nshp2 (assoc (.pop collided-array-2)
-              ;;              :shots (vec collided-array-2))
+              [collided-array-1 collided-array-2] (js-check-array-collision-dsq
+                                                   collision-array-1
+                                                   collision-array-2)
+              nshp1 (assoc (.pop collided-array-1)
+                           :shots (vec collided-array-1))
+              nshp2 (assoc (.pop collided-array-2)
+                           :shots (vec collided-array-2))
 
               [ac1 ac2] (mapv :active [nshp1 nshp2])
               ndb (assoc-in db [:state :scene]

@@ -15,17 +15,6 @@
 (defn set-line-width! [ctx width] (set! (.-lineWidth ctx) width))
 (defn set-fill-color! [ctx color] (set! (.-fillStyle ctx) color))
 
-#_
-(defmacro reseting-style [[ctx width color fill reset] & body]
-  (let [old-width (when (and reset width) (.-lineWidth ctx))
-        old-stroke (when (and reset stroke) (.-strokeStyte ctx))
-        old-fill (when (and reset fill) (.-fillStyle ctx))]
-    '(do
-       ~@body
-       (when ~old-width (set! (.-lineWidth ~ctx) ~old-width))
-       (when ~old-stroke (set! (.-strokeStyle ~ctx) old-stroke))
-       (when ~old-fill (set! (.-fillStyle ~ctx) ~old-fill))
-    )))
 
 (defn draw-line
   "Draw a line on `ctx` from `sx`,`sy` to `ex`,`ey`.

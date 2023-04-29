@@ -19,7 +19,6 @@
   (let [scene (:scene state)
         {:keys [ship1 ship2 gravity-well paused]} scene
         ]
-    ;; (obj/draw-sprite gravity-well ctx)
     (run! #(obj/draw-sprite % ctx) [ship1 ship2 gravity-well])
     (when paused
       (hsu/write-centered ctx (/ (:height pr/game-view) 2) "PAUSED" 4 ))
@@ -45,7 +44,6 @@
         o2 "2p start"
         o3  "options"
         o4  "credits"
-        ;; b1 "'wasd' - player 1     player 2 - arrows"
         b1 (str p1-keys " - player 1     player 2 - " p2-keys)
         b2 "enter - select            esc - menu"
         b3 "space - select/pause"
@@ -54,7 +52,7 @@
         ]
     (run!
       (fn [[txt ypos size]]
-        (hsu/write-centered ctx ypos txt size )) ;:width 1))
+        (hsu/write-centered ctx ypos txt size ))
       [[t1 88 5] [t2 158 2.7]
        [o1 240 2] [o2 290 2] [o3 340 2] [o4 390 2]
        [b1 470 1.2] [b2 500 1.2] [b3 530 1.2] [b4 570 1]])
@@ -69,13 +67,9 @@
         o2 "clojurescript, reagent and re-frame. You can find more"
         o3 "information about the project on it's codeberg page:"
         o4 "https://codeberg.org/kyuvi/spacewar-in-cljs"
-        ;; o5 "This is also an ode to Steve 'the slug' Russell, who"
         o5 "An ode to Steve 'slug' Russell,"
         o6 "who wrote the first video game (spacewar!) and the first"
-        ;; o6 "wrote the first video game (spacewar!) and the first version"
-        ;; o7 " version of John McCarthy's lisp (keeping the s-expressions!)."
         o7 "lisp interpreter (keeping the s-expressions :)."
-        ;; o7 "of John McCarthy's lisp, keeping the s-expressions."
         o8  "Also Thanks to John McCarthy, Richard Stallman and Rich Hickey"
         o9  "for Lisp, GNU Emacs (and the GPL) and Clojure respectively,"
         o10 "and thanks to Luxedo for his excellent javascript version at"
@@ -90,22 +84,13 @@
         ]
     (run!
      (fn [[txt ypos size]]
-       (hsu/write-centered ctx ypos txt size )) ;:width 0.8))
+       (hsu/write-centered ctx ypos txt size ))
      [[t1 55 4] [t2 105 2]
       [o1 170 1] [o2 190 1] [o3 210 1] [o4 230 0.8] [o5 270 1] [o6 290 1]
       [o7 310 1] [o8 330 1] [o9 350 1][o10 380 1] [o11 400 0.8]
       [c1 480 0.9][c2 500 0.9][c3 520 0.9]
       [b1 555 1] [b4 575 1]]
      )
-    ;; (run!
-    ;;  (fn [[txt xpos ypos size]]
-    ;;    (hsu/write-text ctx xpos ypos txt size))
-    ;;  [
-    ;;   [o1 40 170 1] [o2 40 190 1] [o3 40 210 1]
-    ;;   ;; [o4 390 1]
-    ;;   [o5 40 270 1] [o6 40 290 1]
-    ;;   [o7 20 310 1] [o8 8 330 1] [o9 40 350 1][o10 40 370 1] ; [o11 390 1]; [o4 390 2]
-    ;;   ])
     ))
 
 (defn draw-options-scene [ctx state])
@@ -134,54 +119,38 @@
         b2 "or 'up', 'down', 'left' or 'right'."
         ;; b1 "esc - menu"
         b4 pr/version
-        cursor (:cursor state)
-        ]
+        cursor (:cursor state)]
     (run! (fn [[txt ypos size]]
-            (hsu/write-centered ctx ypos txt size )) ;:width 0.8))
+            (hsu/write-centered ctx ypos txt size ))
           [[t1 55 4]
            [t2 145 2.5]
            [o1 200 2][o2 250 2]
            [t3 300 2.5]
-           [o3 355 2][o4 405 2]
-           [o5 450 2.5]
+           [o3 355 2][o4 405 2] [o5 450 2.5]
            [b1 500 1] [b2 520 1] [b4 575 1]]
           )
-    (obj/draw-sprite cursor ctx)
-
-    )
-  )
+    (obj/draw-sprite cursor ctx)))
 
 (defn draw-end-scene [ctx state]
   (let [prev (rfu/<sub [::subs/previous])
-        ;; {:keys [p1 p2]} (:scores prev)
-        ;; winner (cond (> p1 p2) 1
-        ;;              (> p2 p1) 2
-        ;;              :else "draw")
         {:keys [ship1 ship2]} (:ships prev)
         winner (cond (and (not (true? ship1)) (not (true? ship2))) "draw"
                       (not ship2) 1
-                      (not ship1) 2
-                      )
+                      (not ship1) 2)
         t1 "GAME OVER"
         s1 (if (= winner "draw") winner
                (if (= (:mode prev) :single)
                  (str  " YOU " (if (== winner 1) "WON " "LOST "))
                  (str " PLAYER " winner " WON ")))
-        ;; s2 (str p1 "       "  p2)
-        ;; s2 "tst"
         c1 "play again"
         c2 "menu"
         b4 pr/version
-        cursor (:cursor state)
-        ]
-(run!
+        cursor (:cursor state)]
+    (run!
      (fn [[txt ypos size]]
        (hsu/write-centered ctx ypos txt size ))
      [[t1 100 5]
       [s1 200 3]
-      ;; [s2 255 3]
       [c1 350 2] [c2 400 2]
       [b4 575 1]])
-
-    (obj/draw-sprite cursor ctx)
-    ))
+    (obj/draw-sprite cursor ctx)))

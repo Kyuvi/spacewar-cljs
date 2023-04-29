@@ -5,13 +5,8 @@
 
   (:require [reagent.core :as rg]
             [reagent.dom :as rd]
-            ;; [sutils.browser :as bru]
             [sutils.canvas :as cvu]
             [sutils.rf :as rfu]
-            ;; [sutils.hershey :as hsh
-            ;;  :refer [canvas-write-text canvas-write-centered]
-            ;;  :rename {canvas-write-text write-h
-            ;;           canvas-write-centered write-hc}]
             [spacewar.hershey :as hs]
             [spacewar.obj :as obj]
             [spacewar.scenes :as sn]
@@ -28,18 +23,10 @@
   (let [{:keys [width height radius]} pr/game-view
         update-view
         (fn [comp]
-          (let [
-                ;; game-ctx (.getContext (.-firstChild (rd/dom-node comp)) "2d")
-                ;; mask-ctx (.getContext (.-lastChild (rd/dom-node comp)) "2d")
-                mask-ctx (cvu/get-context (.-firstChild (rd/dom-node comp)))
+          (let [mask-ctx (cvu/get-context (.-firstChild (rd/dom-node comp)))
                 game-ctx (cvu/get-context (.-lastChild (rd/dom-node comp)))
                 state (get (rg/props comp) :state)
-                {:keys [mode star-list]} state
-                ;; stars (:star-list state)
-                ;; mode (:mode state)
-                ;; (set! (.-shadowBlur game-ctx) 20)
-                ]
-
+                {:keys [mode star-list]} state]
             ;; mask
             (set! (.-globalCompositeOperation mask-ctx) "xor")
             (cvu/fill-rect mask-ctx 0 0 width height "black" )
@@ -48,7 +35,6 @@
             ;; main-screen
             (pr/draw-border game-ctx)
             (pr/draw-stars game-ctx star-list)
-            ;; (set! (.-lineWidth game-ctx) 1)
             (case mode
               :menu
               (sn/draw-menu-scene game-ctx state )
@@ -59,20 +45,7 @@
               :credits
               (sn/draw-credits-scene game-ctx)
               :end
-              (sn/draw-end-scene game-ctx state)
-
-              )
-                ;; (set! (.-shadowColor mask-ctx) "#080")
-                ;; (set! (.-shadowOffsetX mask-ctx) 0)
-                ;; (set! (.-shadowOffsetY mask-ctx) 0)
-                ;; (set! (.-shadowBlur mask-ctx) 20)
-            ;; (write-h )
-            ;; (write-h game-ctx 200 200 "hei" 4 :color pr/vector-color)
-            ;; (hs/write-text game-ctx 200 200 "hei" 4 :color pr/vector-color)
-            ;; (hs/write-text game-ctx 0 0 "hei" 4 :color pr/vector-color)
-
-            ;; (cvu/fill-rect mask-ctx 0 0 width height )
-            ))]
+              (sn/draw-end-scene game-ctx state))))]
     (rg/create-class
      {:component-did-mount update-view
       :component-did-update update-view
@@ -82,19 +55,12 @@
          [:canvas {:id "mask-canv"
                    :width width :height height
                    :shadow-color "#080"
-                   ;; :shadow-offset-x 0
-                   ;; :shadow-offset-y 0
-                   ;; :shadow-blur 20
-                   ;; :style canvas-style
                    :style (conj canvas-style {:position "absolute"})
                    }]
          [:canvas {:id "game-canv"
                    :width width :height height
                    :style canvas-style
-                   ;; :style (conj canvas-style {:position "absolute"})
-                   }]]
-        )
-      })))
+                   }]])})))
 
 (defn spcanv-outer []
   (let [state (rfu/<sub [::subs/state])]
