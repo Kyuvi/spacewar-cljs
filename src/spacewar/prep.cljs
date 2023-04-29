@@ -152,7 +152,7 @@
 
         ;;;; miscellenious functions ;;;;
 
-(defn check-num [n] ;; TODO: change to valid-num?
+(defn valid-num? [n] ;; TODO: change to valid-num?
   (and (number? n) (not (.isNaN js/Number n)) (js/isFinite n) ))
 
 
