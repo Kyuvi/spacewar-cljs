@@ -48,7 +48,8 @@
         ;; b1 "'wasd' - player 1     player 2 - arrows"
         b1 (str p1-keys " - player 1     player 2 - " p2-keys)
         b2 "enter - select            esc - menu"
-        b3 pr/version
+        b3 "space - select/pause"
+        b4 pr/version
         cursor (:cursor state)
         ]
     (run!
@@ -56,7 +57,7 @@
         (hsu/write-centered ctx ypos txt size )) ;:width 1))
       [[t1 88 5] [t2 158 2.7]
        [o1 240 2] [o2 290 2] [o3 340 2] [o4 390 2]
-       [b1 470 1.2] [b2 500 1.2] [b3 570 1]])
+       [b1 470 1.2] [b2 500 1.2] [b3 530 1.2] [b4 570 1]])
     (obj/draw-sprite cursor ctx)
     ))
 
@@ -85,7 +86,7 @@
         c3 ""
 
         b1 "esc - menu"
-        b3 pr/version
+        b4 pr/version
         ]
     (run!
      (fn [[txt ypos size]]
@@ -94,7 +95,7 @@
       [o1 170 1] [o2 190 1] [o3 210 1] [o4 230 0.8] [o5 270 1] [o6 290 1]
       [o7 310 1] [o8 330 1] [o9 350 1][o10 380 1] [o11 400 0.8]
       [c1 480 0.9][c2 500 0.9][c3 520 0.9]
-      [b1 555 1] [b3 575 1]]
+      [b1 555 1] [b4 575 1]]
      )
     ;; (run!
     ;;  (fn [[txt xpos ypos size]]
@@ -132,7 +133,7 @@
         b1 "valid control keys are: either one of a-z/0-9"
         b2 "or 'up', 'down', 'left' or 'right'."
         ;; b1 "esc - menu"
-        b3 pr/version
+        b4 pr/version
         cursor (:cursor state)
         ]
     (run! (fn [[txt ypos size]]
@@ -143,7 +144,7 @@
            [t3 300 2.5]
            [o3 355 2][o4 405 2]
            [o5 450 2.5]
-           [b1 500 1] [b2 520 1] [b3 575 1]]
+           [b1 500 1] [b2 520 1] [b4 575 1]]
           )
     (obj/draw-sprite cursor ctx)
 
@@ -170,7 +171,7 @@
         ;; s2 "tst"
         c1 "play again"
         c2 "menu"
-        b3 pr/version
+        b4 pr/version
         cursor (:cursor state)
         ]
 (run!
@@ -180,7 +181,7 @@
       [s1 200 3]
       ;; [s2 255 3]
       [c1 350 2] [c2 400 2]
-      [b3 575 1]])
+      [b4 575 1]])
 
     (obj/draw-sprite cursor ctx)
     ))

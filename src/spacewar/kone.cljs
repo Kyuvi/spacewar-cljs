@@ -231,11 +231,15 @@
    "ArrowDown" #(move-cursor-cofx % :down)})
 
 (def menu-down-actions
+  (let [handle-select-fn  #(switch-mode-cofx %
+                                             [:single :versus
+                                              ;; :options
+                                              :controls
+                                              :credits] )      ]
   (merge cursor-screen-actions
-         {"Enter" #(switch-mode-cofx % [:single :versus
-                                        ;; :options
-                                        :controls
-                                        :credits])}))
+         {"Enter" handle-select-fn}
+         {" " handle-select-fn}
+         )))
 
 (def credit-down-actions
   ;; {"Escape" #((let [cofx %] ;; doesn't work, why?
@@ -245,20 +249,29 @@
   )
 
 (def options-down-actions
+  (let [handle-select-fn #(handle-options-enter-cofx %)]
   (merge cursor-screen-actions credit-down-actions
-         {"Enter" #(handle-options-enter-cofx %)}))
+         {"Enter" handle-select-fn}
+         {" " handle-select-fn}
+         )))
 
 (def controls-down-actions
-  (merge cursor-screen-actions credit-down-actions
-         {"Enter" #(handle-controls-enter-cofx %)}))
+  (let [handle-select-fn #(handle-controls-enter-cofx %)]
+    (merge cursor-screen-actions credit-down-actions
+           {"Enter" handle-select-fn}
+           {" " handle-select-fn}
+         )))
 
 (def end-down-actions
+  (let [handle-select-fn #(switch-mode-cofx % [:previous :menu])]
   (merge cursor-screen-actions credit-down-actions
-         {"Enter" #(switch-mode-cofx % [:previous :menu])}))
+         {"Enter" handle-select-fn}
+         {" " handle-select-fn}
+         )))
 
 (def game-down-actions
   (merge credit-down-actions
-         ;; {" " #(switch-pause-flag-cofx %)}
+         {" " #(switch-pause-flag-cofx %)}
          ))
 
 (def down-actions-by-mode
@@ -483,7 +496,7 @@
             (recur (inc i)))))))
 
 
-;; this seems faster that using loop (well my implementation in idx at least)
+;; this seems faster that using loop (well my implementation at least)
 (defn js-check-array-collision-dsq
   "Check if the objects contained in vec1 'collide' with the objects contained in vec2.
    Returns a javascript array of the javascript array versions of the vectors
