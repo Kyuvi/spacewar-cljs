@@ -8,6 +8,10 @@ Mainly to experiment with using reagent/re-frame for making games on the html ca
 
 As I could not find any clojurescipt versions, it seemed like an interesting project to take on.
 
+Version 1.0
+Basic game with a wormhole in the middle instead of a pulsar.
+Controls buttons can be changed in the options menu
+
 ## Setup
 
 To get an interactive development environment run:
