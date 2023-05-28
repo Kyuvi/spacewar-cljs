@@ -259,7 +259,7 @@
                  :show-shape blast-shape
                  :active (if (>= active 70) false nactive)))
         ;; explosion finished
-        (false active)
+        (false? active)
         (assoc shp :thrusters false :shots (remove-shots-fn shots)
                ))))
   (add-gravity [shp]
