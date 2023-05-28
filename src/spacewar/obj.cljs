@@ -359,7 +359,7 @@
                :active (if (>= active 70) false nactive)
                ))
         ;; explasion finished
-        (false active)
+        (false? active)
         (assoc shp ;;:core ncore
                :thrusters false :shots (remove-shots-fn shots)
                ;; :show-shape []; (if-not (= rotation t-rotation)
