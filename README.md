@@ -8,7 +8,11 @@ Mainly to experiment with using reagent/re-frame for making games on the html ca
 
 As I could not find any clojurescipt versions, it seemed like an interesting project to take on.
 
-Version 1.0 can be played  [Here](https://kyuvi.codeberg.page/spacewar-cljs/@cmp/resources/public/). This is meant to be a two player game so do not expect too much from the AI. Controls can be changed in the "options" menu
+Version 1.0 can be played  [Here](https://kyuvi.codeberg.page/spacewar-cljs/@cmp/resources/public/). 
+
+This is meant to be a two player game so do not expect too much from the AI. 
+
+Controls can be changed in the "options" menu
 
 ## Setup
 
